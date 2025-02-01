@@ -161,6 +161,15 @@ class WPLocalSync {
             'wp-local-sync-settings',
             [$this, 'render_settings_page']
         );
+
+        add_submenu_page(
+            'wp-local-sync',
+            __('Import / Export', 'wp-local-sync'),
+            __('Import / Export', 'wp-local-sync'),
+            'manage_options',
+            'wp-local-sync-import-export',
+            [$this, 'render_import_export_page']
+        );
     }
 
     public function render_admin_page() {
@@ -176,9 +185,23 @@ class WPLocalSync {
         require_once WLS_PLUGIN_DIR . 'templates/settings-page.php';
     }
 
+    public function render_import_export_page() {
+        require_once WLS_PLUGIN_DIR . 'templates/import-export-page.php';
+    }
+
     public function register_settings() {
+        // SSH/SFTP Settings
+        register_setting('wp-local-sync', 'wls_ssh_host');
+        register_setting('wp-local-sync', 'wls_ssh_port');
+        register_setting('wp-local-sync', 'wls_ssh_username');
+        register_setting('wp-local-sync', 'wls_ssh_password');
         register_setting('wp-local-sync', 'wls_ssh_key_path');
-        register_setting('wp-local-sync', 'wls_sftp_port');
+
+        // WordPress Authentication
+        register_setting('wp-local-sync', 'wls_wp_username');
+        register_setting('wp-local-sync', 'wls_wp_app_password');
+
+        // Additional Settings
         register_setting('wp-local-sync', 'wls_backup_retention_days');
     }
 }

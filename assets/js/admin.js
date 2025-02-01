@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.transfer-backup').forEach(btn => {
                 btn.addEventListener('click', this.showTransferModal.bind(this));
             });
+
+            $('.clone-env').on('click', this.handleCloneClick.bind(this));
         },
 
         initModals: function() {
@@ -112,6 +114,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         closeModal: function(modal) {
             modal.style.display = 'none';
+        },
+
+        async handleCloneClick(e) {
+            e.preventDefault();
+            // Implementation needed
         }
     };
 

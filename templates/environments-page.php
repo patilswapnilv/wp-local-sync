@@ -34,6 +34,10 @@ if (!defined('ABSPATH')) {
                             <a href="#" class="delete-env" data-id="<?php echo esc_attr($env->id); ?>">
                                 <?php _e('Delete', 'wp-local-sync'); ?>
                             </a>
+                            |
+                            <a href="#" class="clone-env" data-id="<?php echo esc_attr($env->id); ?>">
+                                <?php _e('Clone', 'wp-local-sync'); ?>
+                            </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

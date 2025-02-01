@@ -62,4 +62,44 @@
 .wls-error {
     color: #dc3232;
     margin: 5px 0;
+}
+
+/* Import/Export Styles */
+.wls-upload-zone {
+    border: 2px dashed #b4b9be;
+    border-radius: 4px;
+    padding: 40px;
+    text-align: center;
+    background: #f8f9f9;
+    margin: 20px 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.wls-upload-zone:hover {
+    border-color: #0073aa;
+    background: #f1f1f1;
+}
+
+.wls-upload-content {
+    color: #555;
+}
+
+.wls-upload-content .dashicons {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 10px;
+}
+
+.wls-export-buttons {
+    margin: 20px 0;
+}
+
+.wls-export-buttons button {
+    margin-right: 10px;
+}
+
+.wls-learn-more {
+    text-decoration: none;
 } 
