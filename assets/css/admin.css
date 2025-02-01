@@ -1,0 +1,65 @@
+.wls-current-environment {
+    background: #fff;
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #ccd0d4;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.wls-env-info {
+    margin: 15px 0;
+}
+
+.wls-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 99999;
+}
+
+.wls-modal-content {
+    position: relative;
+    background: #fff;
+    width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 3px;
+}
+
+.wls-form-row {
+    margin-bottom: 15px;
+}
+
+.wls-form-row label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.wls-form-row input[type="text"],
+.wls-form-row input[type="number"] {
+    width: 100%;
+}
+
+.wls-progress {
+    height: 20px;
+    background: #f1f1f1;
+    border-radius: 3px;
+    margin: 10px 0;
+}
+
+.wls-progress-bar {
+    height: 100%;
+    background: #2271b1;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.wls-error {
+    color: #dc3232;
+    margin: 5px 0;
+} 
