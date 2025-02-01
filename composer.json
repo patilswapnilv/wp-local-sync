@@ -1,37 +1,41 @@
 {
-    "name": "wp-local-sync",
-    "description": "WordPress Local Sync Plugin",
+    "name": "wp-local-sync/wp-local-sync",
+    "description": "WordPress plugin for local development environment synchronization",
     "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "stable",
     "require": {
         "php": ">=7.4",
-        "phpseclib/phpseclib": "~3.0",
+        "composer/installers": "^2.0",
+        "phpseclib/phpseclib": "^3.0",
         "league/flysystem-sftp-v3": "^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
         "yoast/phpunit-polyfills": "^1.0",
-        "brain/monkey": "^2.6"
+        "brain/monkey": "^2.6",
+        "wp-coding-standards/wpcs": "^2.3"
     },
     "autoload": {
         "psr-4": {
             "WPLocalSync\\": "includes/"
-        },
-        "classmap": [
-            "includes/"
-        ]
+        }
     },
     "scripts": {
+        "test": "phpunit",
+        "phpcs": "phpcs --standard=WordPress",
         "post-install-cmd": [
-            "chmod 755 .",
+            "chmod -R 755 .",
             "find . -type f -exec chmod 644 {} \\;",
             "find . -type d -exec chmod 755 {} \\;"
-        ],
-        "test": "phpunit",
-        "test-coverage": "phpunit --coverage-html coverage"
+        ]
     },
     "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        },
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true
     }
-} 
+}

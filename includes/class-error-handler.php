@@ -1,5 +1,7 @@
 <?php
 
+namespace WPLocalSync;
+
 class WLS_Error_Handler {
     private static $instance = null;
     private $errors = [];

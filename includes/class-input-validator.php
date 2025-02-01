@@ -1,5 +1,7 @@
 <?php
 
+namespace WPLocalSync;
+
 class WLS_Input_Validator {
     public function validate_environment($data) {
         $errors = new WP_Error();

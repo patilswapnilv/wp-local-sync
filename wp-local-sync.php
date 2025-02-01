@@ -6,6 +6,8 @@ Version: 1.0.0
 Author: Your Name
 */
 
+namespace WPLocalSync;
+
 // Prevent direct access
 if (!defined('ABSPATH')) {
     exit;
@@ -30,16 +32,33 @@ if (!file_exists(WLS_PLUGIN_DIR . 'vendor/autoload.php')) {
 
 // Load dependencies
 require_once WLS_PLUGIN_DIR . 'vendor/autoload.php';
-require_once WLS_PLUGIN_DIR . 'includes/class-environment-manager.php';
-require_once WLS_PLUGIN_DIR . 'includes/class-backup-manager.php';
-require_once WLS_PLUGIN_DIR . 'includes/class-error-handler.php';
-require_once WLS_PLUGIN_DIR . 'includes/class-rate-limiter.php';
-require_once WLS_PLUGIN_DIR . 'includes/class-input-validator.php';
+
+// Load core files
+$core_classes = [
+    'class-environment-manager.php',
+    'class-backup-manager.php',
+    'class-error-handler.php',
+    'class-rate-limiter.php',
+    'class-input-validator.php'
+];
+
+foreach ($core_classes as $class_file) {
+    require_once WLS_PLUGIN_DIR . 'includes/' . $class_file;
+}
 
 class WPLocalSync {
     private $namespace = 'wp-local-sync/v1';
+    private $environment_manager;
+    private $backup_manager;
+    private $error_handler;
 
     public function __construct() {
+        // Initialize managers
+        $this->error_handler = WLS_Error_Handler::get_instance();
+        $this->environment_manager = new WLS_Environment_Manager();
+        $this->backup_manager = new WLS_Backup_Manager();
+        
+        // Add WordPress hooks
         add_action('rest_api_init', [$this, 'register_routes']);
         add_action('admin_menu', [$this, 'add_admin_menu']);
         add_action('admin_init', [$this, 'register_settings']);
@@ -113,6 +132,62 @@ class WPLocalSync {
             'restUrl' => rest_url('wp-local-sync/v1/')
         ]);
     }
+
+    public function add_admin_menu() {
+        add_menu_page(
+            __('WP Local Sync', 'wp-local-sync'),
+            __('Local Sync', 'wp-local-sync'),
+            'manage_options',
+            'wp-local-sync',
+            [$this, 'render_admin_page'],
+            'dashicons-migrate',
+            100
+        );
+
+        add_submenu_page(
+            'wp-local-sync',
+            __('Environments', 'wp-local-sync'),
+            __('Environments', 'wp-local-sync'),
+            'manage_options',
+            'wp-local-sync-environments',
+            [$this, 'render_environments_page']
+        );
+
+        add_submenu_page(
+            'wp-local-sync',
+            __('Settings', 'wp-local-sync'),
+            __('Settings', 'wp-local-sync'),
+            'manage_options',
+            'wp-local-sync-settings',
+            [$this, 'render_settings_page']
+        );
+    }
+
+    public function render_admin_page() {
+        require_once WLS_PLUGIN_DIR . 'templates/admin-page.php';
+    }
+
+    public function render_environments_page() {
+        $environments = $this->environment_manager->get_environments();
+        require_once WLS_PLUGIN_DIR . 'templates/environments-page.php';
+    }
+
+    public function render_settings_page() {
+        require_once WLS_PLUGIN_DIR . 'templates/settings-page.php';
+    }
+
+    public function register_settings() {
+        register_setting('wp-local-sync', 'wls_ssh_key_path');
+        register_setting('wp-local-sync', 'wls_sftp_port');
+        register_setting('wp-local-sync', 'wls_backup_retention_days');
+    }
 }
 
-new WPLocalSync();
+// Initialize the plugin
+function init_wp_local_sync() {
+    global $wp_local_sync;
+    $wp_local_sync = new WPLocalSync();
+}
+
+// Hook into WordPress init
+add_action('plugins_loaded', 'WPLocalSync\\init_wp_local_sync');

@@ -1,5 +1,7 @@
 <?php
 
+namespace WPLocalSync;
+
 class WLS_Rate_Limiter {
     private $option_prefix = 'wls_rate_limit_';
     private $max_requests = 5;

@@ -1,5 +1,7 @@
 <?php
 
+namespace WPLocalSync;
+
 class WLS_Backup_Manager {
     private $max_backups = 10;
     private $max_backup_age = 30; // days
