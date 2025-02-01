@@ -4,3 +4,9 @@ composer.lock
 .phpcs.cache
 node_modules/
 *.log 
+.env
+.DS_Store
+.env.local
+.env.development
+.env.staging
+.env.production
