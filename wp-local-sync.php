@@ -6,6 +6,36 @@ Version: 1.0.0
 Author: Your Name
 */
 
+// Prevent direct access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+// Define plugin constants
+define('WLS_VERSION', '1.0.0');
+define('WLS_PLUGIN_DIR', plugin_dir_path(__FILE__));
+define('WLS_PLUGIN_URL', plugin_dir_url(__FILE__));
+
+// Check for Composer autoloader
+if (!file_exists(WLS_PLUGIN_DIR . 'vendor/autoload.php')) {
+    add_action('admin_notices', function() {
+        ?>
+        <div class="notice notice-error">
+            <p><?php _e('WP Local Sync requires Composer dependencies to be installed. Please run "composer install" in the plugin directory.', 'wp-local-sync'); ?></p>
+        </div>
+        <?php
+    });
+    return;
+}
+
+// Load dependencies
+require_once WLS_PLUGIN_DIR . 'vendor/autoload.php';
+require_once WLS_PLUGIN_DIR . 'includes/class-environment-manager.php';
+require_once WLS_PLUGIN_DIR . 'includes/class-backup-manager.php';
+require_once WLS_PLUGIN_DIR . 'includes/class-error-handler.php';
+require_once WLS_PLUGIN_DIR . 'includes/class-rate-limiter.php';
+require_once WLS_PLUGIN_DIR . 'includes/class-input-validator.php';
+
 class WPLocalSync {
     private $namespace = 'wp-local-sync/v1';
 
@@ -14,12 +44,6 @@ class WPLocalSync {
         add_action('admin_menu', [$this, 'add_admin_menu']);
         add_action('admin_init', [$this, 'register_settings']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
-        
-        // Schedule backup cleanup
-        if (!wp_next_scheduled('wls_cleanup_backups')) {
-            wp_schedule_event(time(), 'daily', 'wls_cleanup_backups');
-        }
-        add_action('wls_cleanup_backups', [$this, 'cleanup_backups']);
     }
 
     public function register_routes() {
@@ -89,11 +113,6 @@ class WPLocalSync {
             'restUrl' => rest_url('wp-local-sync/v1/')
         ]);
     }
-
-    public function cleanup_backups() {
-        $backup_manager = new WLS_Backup_Manager();
-        $backup_manager->cleanup_old_backups();
-    }
 }
 
-new WPLocalSync(); a
+new WPLocalSync();

@@ -15,15 +15,23 @@
     "autoload": {
         "psr-4": {
             "WPLocalSync\\": "includes/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "WPLocalSync\\Tests\\": "tests/"
-        }
+        },
+        "classmap": [
+            "includes/"
+        ]
     },
     "scripts": {
+        "post-install-cmd": [
+            "chmod 755 .",
+            "find . -type f -exec chmod 644 {} \\;",
+            "find . -type d -exec chmod 755 {} \\;"
+        ],
         "test": "phpunit",
         "test-coverage": "phpunit --coverage-html coverage"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
     }
 } 
